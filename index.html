@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Book an Appointment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf6f1;--card:#fff;--ink:#2b2a33;--mute:#76727f;--accent:#e2674a;--accent-d:#c9502f;--line:#eadfd3;--soft:#fdeee8;--ok:#2f9e6b;--bad:#c0392b}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "DM Sans",system-ui,Arial,sans-serif;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:rgba(250,246,241,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:12px 0 4px}
+.logo{font:700 22px "Fraunces",Georgia,serif}
+nav{display:flex;gap:4px;padding-bottom:8px}
+nav button{background:none;border:0;padding:6px 14px;border-radius:999px;color:var(--mute)}
+nav button[aria-current=true]{background:var(--soft);color:var(--accent-d);font-weight:700}
+.hero{padding:26px 0 8px}
+.hero h1{font:700 clamp(28px,7vw,40px)/1.15 "Fraunces",Georgia,serif;margin:0 0 6px}
+.hero p{color:var(--mute);margin:0}
+.steps{display:flex;gap:6px;margin:18px 0}
+.steps i{flex:1;height:5px;border-radius:9px;background:var(--line)}
+.steps i.on{background:var(--accent)}
+h2{font:700 20px "Fraunces",Georgia,serif;margin:0 0 10px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:start;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;transition:border-color .15s,transform .15s}
+.opt:hover{border-color:var(--accent);transform:translateY(-1px)}
+.opt[aria-pressed=true]{border-color:var(--accent);background:var(--soft)}
+.opt .e{font-size:28px}
+.opt .t{flex:1}.opt small{color:var(--mute);display:block}
+.opt b{white-space:nowrap}
+.days{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px}
+.day{flex:0 0 64px;text-align:center;border:1.5px solid var(--line);background:var(--card);border-radius:14px;padding:8px 0;line-height:1.25}
+.day small{display:block;color:var(--mute)}
+.day b{font-size:20px}
+.day[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.day[aria-pressed=true] small{color:#ffe3da}
+.day:disabled{opacity:.35;cursor:not-allowed}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
+.slot{border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:8px 0}
+.slot:hover{border-color:var(--accent);color:var(--accent-d)}
+.btn{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:10px 20px;font-weight:700}
+.btn:hover{background:var(--accent-d)}
+.btn.alt{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.bad{background:transparent;color:var(--bad);border:1.5px solid var(--bad)}
+.btn.sm{padding:4px 12px;font-size:14px;border-radius:9px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:14px 0}
+label{display:block;font-size:14px;color:var(--mute);margin-top:12px}
+input,select{width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:9px 11px}
+.sum{background:var(--soft);border-radius:12px;padding:10px 14px;margin-bottom:6px}
+.code{font:700 38px/1 "Fraunces",Georgia,serif;letter-spacing:6px;text-align:center;color:var(--accent-d);background:var(--soft);border-radius:14px;padding:16px;margin:12px 0}
+.tag{display:inline-block;border-radius:999px;padding:0 10px;font-size:13px;background:var(--soft);color:var(--accent-d)}
+.tag.Confirmed,.tag.Completed{background:#e3f5ec;color:var(--ok)}.tag.Cancelled{background:#f7e4e1;color:var(--bad)}
+.mute{color:var(--mute);font-size:14px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.bk{border-top:1px solid var(--line);padding:10px 0}.bk:first-of-type{border-top:0}
+.stats{display:flex;gap:10px}.stats div{flex:1;background:var(--soft);border-radius:12px;padding:10px}.stats b{display:block;font-size:24px;color:var(--accent-d)}
+.empty{text-align:center;color:var(--mute);padding:20px 0}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));inset-inline:16px;margin:auto;max-width:380px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;z-index:20;text-align:center;display:none}
+footer{text-align:center;color:var(--mute);font-size:13px;padding:24px 0 40px}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="bar"><span class="logo" id="brand">📅 Booking</span></div><nav id="nav"></nav></div></header>
+<main class="wrap" id="app"></main>
+<footer>Free cancellation anytime · Confirmation code sent on screen</footer>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const S={cfg:null,services:[],providers:[],view:'book',step:1,sel:{service:null,provider:0,date:'',time:''},slots:null,done:null,found:null,pw:'',adm:{date:'',list:[]}};
+const VIEWS=[['book','Book'],['manage','My booking'],['admin','Admin']];
+const money=n=>S.cfg.currency+(+n).toFixed(+n%1?2:0);
+const svc=id=>S.services.find(s=>s.id==id),prov=id=>S.providers.find(p=>p.id==id);
+const dObj=d=>new Date(d+'T00:00:00Z');
+const addDays=(d,n)=>new Date(dObj(d).getTime()+n*864e5).toISOString().slice(0,10);
+const dLabel=(d,o)=>dObj(d).toLocaleDateString('en-GB',{...o,timeZone:'UTC'});
+async function api(url,o={}){
+ const h={};if(S.pw)h['x-admin-password']=S.pw;
+ let body;if(o.json){h['Content-Type']='application/json';body=JSON.stringify(o.json)}
+ const r=await fetch(url,{method:o.method,body,headers:h});
+ const d=await r.json().catch(()=>({}));
+ if(!r.ok)throw new Error(d.error||'Request failed');return d}
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',3000)}
+function nav(){$('#nav').innerHTML=VIEWS.map(([k,l])=>`<button data-v="${k}" ${S.view==k?'aria-current="true"':''}>${l}</button>`).join('')}
+const stepper=()=>`<div class="steps" aria-label="Step ${S.step} of 4">${[1,2,3,4].map(i=>`<i class="${i<=S.step?'on':''}"></i>`).join('')}</div>`;
+const back=()=>S.step>1?`<p><button class="btn alt" data-back>← Back</button></p>`:'';
+function summary(){const s=svc(S.sel.service),p=S.sel.provider?prov(S.sel.provider):null;
+ return `<div class="sum"><b>${esc(s.name)}</b> · ${s.duration} min · ${money(s.price)}<br>${p?'With '+esc(p.name):'Any available specialist'}${S.sel.date?' · '+dLabel(S.sel.date,{weekday:'short',day:'numeric',month:'short'}):''}${S.sel.time?' at '+S.sel.time:''}</div>`}
+function book(){
+ let h=`<section class="hero"><h1>Book your visit in under a minute</h1><p>Open ${esc(S.cfg.open)} – ${esc(S.cfg.close)}. Pick a service, a time, done.</p></section>${stepper()}`;
+ if(S.step==1)h+=`<h2>1. Choose a service</h2>`+S.services.map(s=>`<button class="opt" data-svc="${s.id}" aria-pressed="${S.sel.service==s.id}"><span class="e">${esc(s.emoji)}</span><span class="t">${esc(s.name)}<small>${s.duration} min</small></span><b>${money(s.price)}</b></button>`).join('')||'<p class="empty">No services yet.</p>';
+ if(S.step==2)h+=`<h2>2. Choose a specialist</h2><button class="opt" data-prov="0" aria-pressed="${!S.sel.provider}"><span class="e">⭐</span><span class="t">Any available<small>Fastest — we pick for you</small></span></button>`+S.providers.map(p=>`<button class="opt" data-prov="${p.id}" aria-pressed="${S.sel.provider==p.id}"><span class="e">👤</span><span class="t">${esc(p.name)}<small>${esc(p.role||'')}</small></span></button>`).join('')+back();
+ if(S.step==3){const days=Array.from({length:14},(_,i)=>addDays(S.cfg.today,i));
+  h+=`<h2>3. Pick a date and time</h2><div class="days">${days.map(d=>{const closed=S.cfg.closedDays.includes(dObj(d).getUTCDay());return `<button class="day" data-date="${d}" aria-pressed="${S.sel.date==d}" ${closed?'disabled title="Closed"':''}><small>${dLabel(d,{weekday:'short'})}</small><b>${dObj(d).getUTCDate()}</b><small>${dLabel(d,{month:'short'})}</small></button>`}).join('')}</div>`;
+  h+=!S.sel.date?'<p class="mute">Select a day to see free times.</p>':S.slots===null?'<p class="mute">Loading times…</p>':S.slots.length?`<div class="slots">${S.slots.map(t=>`<button class="slot" data-time="${t}">${t}</button>`).join('')}</div>`:'<p class="empty">No free times on this day. Try another date or specialist.</p>';
+  h+=back()}
+ if(S.step==4)h+=`<h2>4. Your details</h2>${summary()}<form id="bf"><label>Full name<input name="name" required autocomplete="name"></label><label>Phone<input name="phone" type="tel" required autocomplete="tel"></label><label>Email (optional)<input name="email" type="email" autocomplete="email"></label><p class="row"><button class="btn">Confirm booking</button><button type="button" class="btn alt" data-back>← Back</button></p></form>`;
+ $('#app').innerHTML=h}
+function doneView(){const b=S.done;
+ $('#app').innerHTML=`<section class="hero"><h1>You're booked! 🎉</h1><p>Save this code. You'll need it with your phone number to manage the booking.</p></section><div class="code">${esc(b.code)}</div>
+ <div class="card"><b>${esc(b.service)}</b> with ${esc(b.provider)}<br>${dLabel(b.date,{weekday:'long',day:'numeric',month:'long'})}, ${b.time} – ${b.until}<br><span class="tag">${esc(b.status)}</span></div>
+ <p><button class="btn" data-new>Book another</button></p>`}
+function bkHtml(b,admin){return `<div class="bk"><b>${b.time}–${b.until}</b> · ${esc(b.service)} · ${esc(b.provider)} ${admin?'':`<span class="tag ${b.status}">${esc(b.status)}</span>`}<br><span class="mute">${dLabel(b.date,{weekday:'short',day:'numeric',month:'short'})} · ${esc(b.name)} · ${esc(b.phone)} · code ${esc(b.code)}</span>
+ ${admin?`<br><select data-st="${b.id}" aria-label="Status" style="width:auto;margin-top:4px">${['Pending','Confirmed','Completed','Cancelled'].map(s=>`<option ${b.status==s?'selected':''}>${s}</option>`).join('')}</select>`:''}</div>`}
+function manage(){
+ $('#app').innerHTML=`<section class="hero"><h1>Manage your booking</h1><p>Enter the code you received and your phone number.</p></section><div class="card"><form id="mf"><label>Booking code<input name="code" required maxlength="8" autocapitalize="characters" style="text-transform:uppercase"></label><label>Phone number<input name="phone" type="tel" required></label><p><button class="btn">Find my booking</button></p></form></div>
+ ${S.found?`<div class="card">${bkHtml(S.found,false)}${['Pending','Confirmed'].includes(S.found.status)?`<p><button class="btn bad" data-cancel>Cancel this booking</button></p>`:''}</div>`:''}`}
+async function admin(){
+ if(!S.pw){$('#app').innerHTML=`<div class="card"><h2>Admin sign in</h2><form id="lf"><label>Password<input name="pw" type="password" required autocomplete="current-password"></label><p><button class="btn">Sign in</button></p></form></div>`;return}
+ if(!S.adm.date)S.adm.date=S.cfg.today;
+ try{S.adm.list=await api('/api/admin/bookings?date='+S.adm.date)}catch(e){S.pw='';toast(e.message);return admin()}
+ const act=S.adm.list.filter(b=>b.status!='Cancelled').length;
+ $('#app').innerHTML=`<div class="card"><h2>Schedule</h2><label>Date<input type="date" id="ad" value="${S.adm.date}"></label><div class="stats" style="margin:12px 0"><div><b>${S.adm.list.length}</b>Bookings</div><div><b>${act}</b>Active</div></div>${S.adm.list.map(b=>bkHtml(b,true)).join('')||'<p class="empty">No bookings on this day.</p>'}</div>
+ <div class="card"><h2>Services</h2>${S.services.map(s=>`<div class="row bk"><span style="flex:1">${esc(s.emoji)} ${esc(s.name)} · ${s.duration} min · ${money(s.price)}</span><button class="btn bad sm" data-delsvc="${s.id}">Remove</button></div>`).join('')}
+ <form id="sf"><label>New service name<input name="name" required></label><label>Duration<select name="duration"><option>30</option><option>45</option><option selected>60</option><option>90</option><option>120</option></select></label><label>Price<input name="price" type="number" min="0" step="1" required></label><label>Emoji<input name="emoji" value="✨" maxlength="4"></label><p><button class="btn">+ Add service</button></p></form></div>
+ <div class="card"><h2>Team</h2>${S.providers.map(p=>`<div class="row bk"><span style="flex:1">👤 ${esc(p.name)} · <span class="mute">${esc(p.role||'')}</span></span><button class="btn bad sm" data-delprov="${p.id}">Remove</button></div>`).join('')}
+ <form id="pf"><label>Name<input name="name" required></label><label>Role<input name="role"></label><p><button class="btn">+ Add team member</button></p></form></div>`}
+async function reload(){[S.services,S.providers]=await Promise.all([api('/api/services'),api('/api/providers')])}
+function render(){nav();({book:()=>S.done?doneView():book(),manage,admin})[S.view]()}
+async function loadSlots(){S.slots=null;book();try{S.slots=await api(`/api/slots?service=${S.sel.service}&provider=${S.sel.provider}&date=${S.sel.date}`)}catch(e){S.slots=[];toast(e.message)}if(S.step==3)book()}
+document.addEventListener('click',async e=>{
+ const t=e.target.closest('button');if(!t)return;const d=t.dataset;
+ try{
+ if(d.v){S.view=d.v;render()}
+ else if(d.svc){S.sel.service=+d.svc;S.step=2;book()}
+ else if('prov' in d){S.sel.provider=+d.prov;S.sel.date='';S.sel.time='';S.slots=null;S.step=3;book()}
+ else if(d.date){S.sel.date=d.date;loadSlots()}
+ else if(d.time){S.sel.time=d.time;S.step=4;book()}
+ else if('back' in d){S.step=Math.max(1,S.step-1);if(S.step<3){S.sel.time=''}book()}
+ else if('new' in d){S.done=null;S.step=1;S.sel={service:null,provider:0,date:'',time:''};S.slots=null;render()}
+ else if('cancel' in d){if(confirm('Cancel this booking?')){await api('/api/bookings/'+S.found.code+'/cancel',{method:'POST',json:{phone:S.found.phone}});S.found.status='Cancelled';toast('Booking cancelled');manage()}}
+ else if(d.delsvc){await api('/api/admin/services/'+d.delsvc,{method:'DELETE'});await reload();admin()}
+ else if(d.delprov){await api('/api/admin/providers/'+d.delprov,{method:'DELETE'});await reload();admin()}
+ }catch(err){toast(err.message);if(S.step==4&&S.view=='book')loadSlotsBack()}});
+function loadSlotsBack(){S.step=3;S.sel.time='';loadSlots()}
+document.addEventListener('change',async e=>{const t=e.target;
+ try{
+ if(t.id=='ad'){S.adm.date=t.value;admin()}
+ if(t.dataset.st){await api('/api/admin/bookings/'+t.dataset.st,{method:'PATCH',json:{status:t.value}});toast('Status updated');admin()}
+ }catch(err){toast(err.message)}});
+document.addEventListener('submit',async e=>{
+ e.preventDefault();const f=e.target,d=Object.fromEntries(new FormData(f));
+ try{
+  if(f.id=='bf'){S.done=await api('/api/bookings',{method:'POST',json:{service_id:S.sel.service,provider_id:S.sel.provider,date:S.sel.date,time:S.sel.time,...d}});render()}
+  if(f.id=='mf'){S.found=await api('/api/bookings/'+encodeURIComponent(d.code.trim().toUpperCase())+'?phone='+encodeURIComponent(d.phone));manage()}
+  if(f.id=='lf'){S.pw=d.pw;admin()}
+  if(f.id=='sf'){await api('/api/admin/services',{method:'POST',json:d});await reload();toast('Service added');admin()}
+  if(f.id=='pf'){await api('/api/admin/providers',{method:'POST',json:d});await reload();toast('Team member added');admin()}
+ }catch(err){toast(err.message);if(f.id=='bf')loadSlotsBack();if(f.id=='mf'){S.found=null}}});
+(async()=>{try{S.cfg=await api('/api/config');await reload();$('#brand').textContent='📅 '+S.cfg.business;document.title=S.cfg.business+' – Book an Appointment';render()}
+ catch(e){$('#app').innerHTML='<p class="empty">Could not reach the server.</p>'}})();
+</script>
+</body>
+</html>
